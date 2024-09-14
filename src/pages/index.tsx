@@ -1,118 +1,141 @@
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
+import { Skeleton as AntSkeleton, Button, Col, Flex, Row, Typography } from 'antd'
+import { Inter } from 'next/font/google'
+import Image from 'next/image'
+import Link from 'next/link'
+import Skeleton from 'react-loading-skeleton'
+import { CompanyFactory } from '~/assets'
+import Layout from '~/components/Layout'
+import Section from '~/components/sky-ui/Section/Section'
+import SectionTitle from '~/components/sky-ui/Section/SectionTitle'
+import SwiperSlider from '~/components/sky-ui/SwiperSlider'
+import BannerCarousel from './home/components/banner/BannerCarousel'
+import HomePartnerSlider from './home/components/HomePartnerSlider'
+import Specification from './home/components/specification/Specification'
+import useHomeViewModel from './home/hooks/useHomeViewModel'
+import PostItem from './post/components/PostItem'
+import ProductItem from './product/components/ProductItem'
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const viewModel = useHomeViewModel()
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/pages/index.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <>
+      <main className={`flex min-h-screen flex-col items-center justify-between ${inter.className}`}>
+        <Layout
+          header={
+            <>
+              <BannerCarousel items={viewModel.heroBanners} loading={viewModel.heroBanners.length <= 0} />
+              <Specification className='mx-5 sm:mx-10 lg:mx-20' />
+            </>
+          }
+        >
+          <Section
+            titleProps={{
+              title: 'Về chúng tôi'
+            }}
+            className='relative'
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+            <Row gutter={[20, 20]}>
+              <Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
+                <Image
+                  src={CompanyFactory}
+                  alt='img-about'
+                  width={900}
+                  height={900}
+                  className='pointer-events-none object-cover '
+                />
+              </Col>
+              <Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
+                <Flex vertical className='h-full' justify='space-between'>
+                  <Flex vertical gap={20}>
+                    <Typography.Text className='text-2xl font-semibold text-secondPrimary'>
+                      Công ty TNHH MTV May Mặc Phụng Nguyên
+                    </Typography.Text>
+                    <Typography.Paragraph className='text-base'>
+                      <strong>Công ty TNHH MTV May Mặc Phụng Nguyên</strong> được thành lập vào tháng 4 năm 2016, với
+                      ngành nghề kinh doanh chuyên gia công hàng may mặc xuất khẩu, thị trường chính là Mỹ và Nga. Hiện
+                      nay, số lượng cán bộ, công nhân viên tại Công ty là 700 người. Trong số đó có 3 đảng viên. Trong
+                      những năm qua, Công ty luôn đoàn kết, nỗ lực phát triển sản xuất, tạo nhiều việc làm cho người lao
+                      động, đóng góp tích cực vào công tác an sinh xã hội tại địa phương.
+                    </Typography.Paragraph>
+                  </Flex>
+                  <Flex justify='center' className='mb-10'>
+                    <Link href='/gioi-thieu'>
+                      <Button type='primary' className='w-fit'>
+                        Xem thêm
+                      </Button>
+                    </Link>
+                  </Flex>
+                </Flex>
+              </Col>
+            </Row>
+          </Section>
+          <Section
+            titleProps={{
+              title: 'Sản phẩm',
+              position: 'center'
+            }}
+            subTitleProps={{
+              title: 'Sản Phẩm Của Chúng Tôi',
+              position: 'center',
+              size: 'middle'
+            }}
+          >
+            <SwiperSlider
+              dataSource={viewModel.homeProducts}
+              placeholder={
+                <>
+                  <Skeleton height={216} />
+                  <Skeleton className='mt-5' height={24} />
+                </>
+              }
+              render={(record) => {
+                return <ProductItem item={record} />
+              }}
             />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+          </Section>
+          <Section className='relative gap-[40px] md:gap-[80px]'>
+            <Flex className='relative h-full w-full' vertical justify='center' align='center'>
+              <SectionTitle
+                className='absolute top-0 z-10 w-fit -translate-y-1/2 select-none'
+                title='Partner'
+                position='center'
+                underline={false}
+                size='large'
+              />
+              <SectionTitle
+                className='absolute top-0 z-0 -translate-y-1/2 select-none text-7xl opacity-25 md:text-9xl'
+                title='Partner'
+                position='center'
+                underline={false}
+                size='superLarge'
+                type='secondary'
+              />
+            </Flex>
+            <HomePartnerSlider items={viewModel.partners} loading={viewModel.partners.length <= 0} />
+          </Section>
+          <Section
+            titleProps={{
+              title: 'Tin tức & Sự kiện'
+            }}
+          >
+            <SwiperSlider
+              dataSource={viewModel.posts}
+              placeholder={
+                <>
+                  <Skeleton height={350} />
+                  <AntSkeleton active className='absolute bottom-0 left-0 right-0 z-10 p-5' />
+                </>
+              }
+              render={(record) => {
+                return <PostItem item={record} />
+              }}
+            />
+          </Section>
+        </Layout>
+      </main>
+    </>
+  )
 }
